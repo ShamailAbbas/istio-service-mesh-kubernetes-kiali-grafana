@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: order-management
-        image: thallavi/order-management:1.0.0
+        image: thallavi/order-management:latest
         ports:
         - containerPort: 9090
         env:
@@ -27,6 +27,11 @@ spec:
           value: "http://product-catalog"
         - name: SHIPPING_HANDLING_API_HOST
           value: "http://shipping-and-handling"
+        - name: SPRING_DATA_MONGODB_URI
+          value: "mongodb://ecommerce-mongo:27017/order_management"
+        - name: SPRING_DATA_MONGODB_DATABASE
+          value: order_management
+
 ---
 apiVersion: v1
 kind: Service

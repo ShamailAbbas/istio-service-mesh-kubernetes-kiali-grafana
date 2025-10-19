@@ -17,7 +17,22 @@ spec:
     spec:
       containers:
       - name: product-inventory
-        image: thallavi/product-inventory:1.0.0
+        image: thallavi/product-inventory:latest
+        ports:
+        - containerPort: 3002
+        env:
+        - name: POSTGRES_HOST
+          value: "ecommerce-postgres"
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB
+          value: "inventory_db"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+
+
 ---
 apiVersion: v1
 kind: Service

@@ -17,9 +17,17 @@ spec:
     spec:
       containers:
       - name: contact-support-team
-        image: thallavi/contact-support-team:1.0.0
+        image: thallavi/contact-support-team:latest
         ports:
         - containerPort: 8000
+        env:
+        - name: MONGODB_HOST
+          value: "ecommerce-mongo"
+        - name: MONGODB_PORT
+          value: "27017"
+        - name: MONGODB_DATABASE
+          value: "contact_db"
+
 ---
 apiVersion: v1
 kind: Service

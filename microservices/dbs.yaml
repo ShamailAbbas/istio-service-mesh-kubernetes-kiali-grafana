@@ -1,0 +1,144 @@
+# ====================================
+# 🗃 MongoDB
+# ====================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-mongo
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecommerce-mongo
+  template:
+    metadata:
+      labels:
+        app: ecommerce-mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:6.0
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+      volumes:
+        - name: mongo-data
+          emptyDir: {}  # replace with PVC for persistence
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecommerce-mongo
+  namespace: ecommerce
+spec:
+  selector:
+    app: ecommerce-mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
+  type: ClusterIP
+---
+# ====================================
+# 🐘 PostgreSQL
+# ====================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-postgres
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecommerce-postgres
+  template:
+    metadata:
+      labels:
+        app: ecommerce-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "inventory_db"
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecommerce-postgres
+  namespace: ecommerce
+spec:
+  selector:
+    app: ecommerce-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: ClusterIP
+---
+# ====================================
+# 🐬 MySQL
+# ====================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-mysql
+  namespace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecommerce-mysql
+  template:
+    metadata:
+      labels:
+        app: ecommerce-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "root"
+            - name: MYSQL_DATABASE
+              value: "auth_db"
+            - name: MYSQL_USER
+              value: "dev"
+            - name: MYSQL_PASSWORD
+              value: "dev"
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecommerce-mysql
+  namespace: ecommerce
+spec:
+  selector:
+    app: ecommerce-mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+  type: ClusterIP

@@ -17,9 +17,13 @@ spec:
     spec:
       containers:
       - name: shipping-and-handling
-        image: thallavi/shipping-and-handling:1.0.0
+        image: thallavi/shipping-and-handling:latest
         ports:
         - containerPort: 8080
+        env:
+        - name:  MONGO_URI
+          value:  mongodb://ecommerce-mongo:27017/shipping_handling
+
 ---
 apiVersion: v1
 kind: Service

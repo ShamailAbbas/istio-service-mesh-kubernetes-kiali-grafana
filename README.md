@@ -36,20 +36,12 @@ The e-commerce application consists of the following microservices:
 ### 1. Install Istio
 
 ```bash
-# Create istio-system namespace
 kubectl create namespace istio-system
-
-# Add Istio Helm repository
 helm repo add istio https://istio-release.storage.googleapis.com/charts
-
-# Install Istio base
-helm install istio-base istio/base -n istio-system --version 1.25.2
-
-# Install istiod
-helm install istiod istio/istiod -n istio-system --version 1.25.2 --wait
-
-# Install Istio ingress gateway
-helm install istio-ingress istio/gateway -n istio-system --version 1.25.2
+helm repo update
+helm install istio-base istio/base -n istio-system --set defaultRevision=default --version 1.27.2
+helm install istiod istio/istiod -n istio-system --version 1.27.2 --wait
+helm install istio-ingress istio/gateway -n istio-system --version 1.27.2 --wait
 
 ```
 
@@ -66,14 +58,12 @@ kubectl get svc -n istio-system
 ### 3. Install Monitoring Add-ons
 
 ```bash
-# Download add-on manifests
 mkdir -p istio-addons
-curl -L https://raw.githubusercontent.com/istio/istio/release-1.25/samples/addons/prometheus.yaml -o istio-addons/prometheus.yaml
-curl -L https://raw.githubusercontent.com/istio/istio/release-1.25/samples/addons/grafana.yaml -o istio-addons/grafana.yaml
-curl -L https://raw.githubusercontent.com/istio/istio/release-1.25/samples/addons/kiali.yaml -o istio-addons/kiali.yaml
-curl -L https://raw.githubusercontent.com/istio/istio/release-1.25/samples/addons/jaeger.yaml -o istio-addons/jaeger.yaml
+curl -L https://raw.githubusercontent.com/istio/istio/release-1.27/samples/addons/prometheus.yaml -o istio-addons/prometheus.yaml
+curl -L https://raw.githubusercontent.com/istio/istio/release-1.27/samples/addons/grafana.yaml -o istio-addons/grafana.yaml
+curl -L https://raw.githubusercontent.com/istio/istio/release-1.27/samples/addons/kiali.yaml -o istio-addons/kiali.yaml
+curl -L https://raw.githubusercontent.com/istio/istio/release-1.27/samples/addons/jaeger.yaml -o istio-addons/jaeger.yaml
 
-# Apply add-on manifests
 kubectl apply -f istio-addons/prometheus.yaml
 kubectl apply -f istio-addons/grafana.yaml
 kubectl apply -f istio-addons/kiali.yaml
@@ -139,11 +129,3 @@ Then open your browser and navigate to:
 - Kiali: http://localhost:20001
 - Grafana: http://localhost:3000
 - Jaeger: http://localhost:16686
-
-## Contributing
-
-Feel free to submit issues, fork the repository, and create pull requests for any improvements.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.

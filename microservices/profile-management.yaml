@@ -17,9 +17,22 @@ spec:
     spec:
       containers:
       - name: profile-management
-        image: thallavi/profile-management:1.0.0
+        image: thallavi/profile-management:latest
         ports:
         - containerPort: 3003
+        env:
+        - name: MYSQL_HOST
+          value: "ecommerce-mysql"
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_DATABASE
+          value: "auth_db"
+        - name: MYSQL_USER
+          value: "dev"
+        - name: MYSQL_PASSWORD
+          value: "dev"
+
+
 ---
 apiVersion: v1
 kind: Service

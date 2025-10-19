@@ -33,6 +33,7 @@ spec:
           value: "http://shipping-and-handling"
         - name: REACT_APP_CONTACT_API_HOST
           value: "http://contact-support-team"
+
 ---
 apiVersion: v1
 kind: Service
